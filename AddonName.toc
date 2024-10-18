@@ -5,7 +5,7 @@
 ## Version: v0.0.0
 ## DefaultState: Enabled
 ## SavedVariables: YourAddonDB
-## X-Curse-Project-ID: 1000615
+## X-Curse-Project-ID: 000000
 
 embeds.xml
 
