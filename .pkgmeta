@@ -1,4 +1,4 @@
-package-as: YourAddonName
+package-as: YourAddon
 
 externals:
   libs/LibStub: https://repos.wowace.com/wow/libstub/trunk

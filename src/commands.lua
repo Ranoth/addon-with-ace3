@@ -8,7 +8,7 @@ local Commands = YourAddon:NewModule("Commands")
 local Printer = YourAddon:GetModule("Printer")
 local Debug = YourAddon:GetModule("Debug")
 
-local addonShortHand = "youraddonshorthand"
+local addonShortHand = "shorthand"
 
 --- prints the help message for the addon's slash commands
 function Commands:PrintHelp()
@@ -19,7 +19,7 @@ function Commands:PrintHelp()
 end
 
 --- Registers additional slash commands for the addon
-YourAddon:RegisterChatCommand("youraddonshorthand", function(input)
+YourAddon:RegisterChatCommand(addonShortHand, function(input)
     local command, args = YourAddon:GetArgs(input, 2)
     if not command then
         Commands:PrintHelp()
