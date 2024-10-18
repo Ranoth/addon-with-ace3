@@ -1,0 +1,15 @@
+## Interface: 110002
+## Title: |cffc66ff0Addon Name|r
+## Notes: A collection of things I want in the game.
+## Author: Ranoth_
+## Version: v0.0.0
+## DefaultState: Enabled
+## SavedVariables: YourAddonDB
+## X-Curse-Project-ID: 1000615
+
+embeds.xml
+
+src\init.lua
+src\printer.lua
+src\debug.lua
+src\commands.lua
