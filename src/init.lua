@@ -12,7 +12,7 @@ local defaults = {
 }
 
 function YourAddon:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("YourAddonDB", defaults, true) -- "YourAddonDB" must be updated in the TOC file
+    self.db = LibStub("AceDB-3.0"):New("YourAddonDB", defaults, true)
 end
 
 function YourAddon:OnEnable()
