@@ -24,3 +24,4 @@ ignore:
   - config.ld
   - docs
   - version.txt
+  - change_addon_name.sh
