@@ -13,9 +13,9 @@ local addonShortHand = "shorthand"
 --- prints the help message for the addon's slash commands
 function Commands:PrintHelp()
     Printer:Print("Available commands")
-    Printer:Print("|cffffff00" .. addonShortHand .. "help|r - Prints this message")
-    Printer:Print("|cffffff00" .. addonShortHand .. "debug|r - Toggles debug mode")
-    Printer:Print("|cffffff00" .. addonShortHand .. "interfaceversion|r - Prints the interface version")
+    Printer:Print("|cffffff00" .. addonShortHand .. " help|r - Prints this message")
+    Printer:Print("|cffffff00" .. addonShortHand .. " debug|r - Toggles debug mode")
+    Printer:Print("|cffffff00" .. addonShortHand .. " interfaceversion|r - Prints the interface version")
 end
 
 --- Registers additional slash commands for the addon
