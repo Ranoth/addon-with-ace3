@@ -27,4 +27,6 @@ if [ -f "${NEW_NAME}.toc" ]; then
     sed -i "s/## Interface: .*/## Interface: ${INTERFACE_VERSION}/" "${NEW_NAME}.toc"
 fi
 
-echo "Replacement complete. Now change the base directory's name to $1"
+mkdir libs
+
+echo "Replacement complete. Now change the base directory's name to $1 and fill the libs folder with the necessary libraries."
