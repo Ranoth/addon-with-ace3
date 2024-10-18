@@ -27,12 +27,4 @@ if [ -f "${NEW_NAME}.toc" ]; then
     sed -i "s/## Interface: .*/## Interface: ${INTERFACE_VERSION}/" "${NEW_NAME}.toc"
 fi
 
-# Rename parent the directory
-BASE_DIR=$(basename "$(pwd)")
-if [ "$BASE_DIR" != "$NEW_NAME" ]; then
-    cd ..
-    mv "$BASE_DIR" "$NEW_NAME"
-    cd "$NEW_NAME"
-fi
-
-echo "Replacement complete."
+echo "Replacement complete. Now change the base directory's name to $1"
