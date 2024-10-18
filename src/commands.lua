@@ -9,7 +9,7 @@ local Printer = YourAddon:GetModule("Printer")
 local Debug = YourAddon:GetModule("Debug")
 
 local addonShortHand = string.lower("YourAddon")
-local colorizedShorthand = "|cffffff00" .. addonShortHand
+local colorizedShortHand = "|cffffff00" .. addonShortHand
 
 --- @type table<string, table>
 local commandList = {
@@ -33,7 +33,7 @@ local commandList = {
 function Commands:PrintHelp()
     Printer:Print("Available commands")
     for command, info in pairs(commandList) do
-        Printer:Print(colorizedShorthand .. " " .. command .. "|r - " .. info.help)
+        Printer:Print(colorizedShortHand .. " " .. command .. "|r - " .. info.help)
     end
 end
 
