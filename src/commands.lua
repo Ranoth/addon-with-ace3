@@ -8,8 +8,15 @@ local Commands = YourAddon:NewModule("Commands")
 local Printer = YourAddon:GetModule("Printer")
 local Debug = YourAddon:GetModule("Debug")
 
-local addonShortHand = string.lower("YourAddon")
-local colorizedShortHand = "|cffffff00" .. addonShortHand
+local addonShortHand = string.lower(addon_name)
+
+local function colorizeShortHand(shortHand)
+    return "|cffffff00" .. shortHand .. "|r"
+end
+
+local function colorizeArgHelp(argsHelp)
+    return "|cff00ff00" .. argsHelp .. "|r"
+end
 
 --- @type table<string, table>
 local commandList = {
@@ -21,11 +28,10 @@ local commandList = {
         func = Debug.Toggle,
         help = "Toggles debug mode"
     },
-    ["interfaceversion"] = {
-        func = function()
-            Printer:Print("Interface version: " .. select(4, GetBuildInfo()))
-        end,
-        help = "Prints the interface version"
+    ["examplewithargs"] = {
+        func = function(args) Printer:Print("Example command with args: " .. args) end,
+        help = "Example command with arguments",
+        argsHelp = "<exampleArgUsage>"
     }
 }
 
@@ -33,22 +39,20 @@ local commandList = {
 function Commands:PrintHelp()
     Printer:Print("Available commands")
     for command, info in pairs(commandList) do
-        Printer:Print(colorizedShortHand .. " " .. command .. "|r - " .. info.help)
+        local argText = info.argsHelp and " " .. colorizeArgHelp(info.argsHelp) or ""
+        Printer:Print(colorizeShortHand(addonShortHand) .. " " .. command .. argText .. " - " .. info.help)
     end
 end
 
 --- Registers additional slash commands for the addon
 YourAddon:RegisterChatCommand(addonShortHand, function(input)
-    local command, args = YourAddon:GetArgs(input, 2)
-    if not command then
-        Commands:PrintHelp()
-        return
-    end
+    local command, args = input:match("^(%S*)%s*(.-)$") -- match the first word as command then the rest of the input as a string of arguments
 
-    if commandList[command] then
-        commandList[command].func(args)
+    local commandInfo = commandList[command]
+    if commandInfo and commandInfo.func then
+        commandInfo.func(args)
     else
-        Printer:Print("Unknown command: " .. command)
+        Printer:Print("Unknown or invalid command " .. command)
         Commands:PrintHelp()
     end
 end)
