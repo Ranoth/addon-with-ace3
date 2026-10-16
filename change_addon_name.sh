@@ -44,7 +44,7 @@ sanitize() {
 
 CODE_NAME=$(printf '%s\n' "$FULL_NAME" | tr -d " '")
 
-PACKAGE_NAME=$(printf '%s\n' "$FULL_NAME" | tr " '" '-')
+PACKAGE_NAME=$(basename "$PWD")
 
 # Replace the placeholder strings in the source files.
 find ./src -type f -name "*.lua" -exec sed -i "s/$CODE_NAME_REPLACE_STRING/$(sanitize "$CODE_NAME")/g" {} +
