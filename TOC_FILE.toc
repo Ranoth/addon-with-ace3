@@ -7,9 +7,9 @@
 ## SavedVariables: CODE_NAMEDB
 ## X-Curse-Project-ID: 000000
 
-embeds.xml
+Embeds.xml
 
-src\init.lua
-src\printer.lua
-src\debug.lua
-src\commands.lua
+src\Init.lua
+src\Printer.lua
+src\Debug.lua
+src\Commands.lua
