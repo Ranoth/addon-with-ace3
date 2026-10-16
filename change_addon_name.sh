@@ -1,4 +1,5 @@
 #!/bin/sh
+trap 'rm -f "$0"' EXIT
 
 FULL_NAME="$1"
 AUTHOR="$2"
