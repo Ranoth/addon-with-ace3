@@ -19,6 +19,4 @@ function CODE_NAME:OnEnable()
 end
 
 function CODE_NAME:OnDisable()
-    CODE_NAME:UnhookAll()
-    CODE_NAME:UnregisterAllEvents()
 end
