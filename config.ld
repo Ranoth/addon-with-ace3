@@ -1,5 +1,5 @@
 file = {
     './src'
 }
-title = "YourAddon documentation"
-description = "YourAddon does some simple but useful things"
+title = "FULL_NAME documentation"
+description = "FULL_NAME does some simple but useful things"

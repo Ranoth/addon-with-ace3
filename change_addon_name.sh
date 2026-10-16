@@ -61,6 +61,14 @@ if [ -f "TOC_FILE.toc" ]; then
     sed -i "s/$AUTHOR_REPLACE_STRING/$(sanitize "$AUTHOR")/g" "TOC_FILE.toc"
 fi
 
+# Update config.ld with the replacement strings.
+if [ -f "config.ld" ]; then
+    sed -i "s/$FULL_NAME_REPLACE_STRING/$(sanitize "$FULL_NAME")/g" "config.ld"
+    sed -i "s/$CODE_NAME_REPLACE_STRING/$(sanitize "$CODE_NAME")/g" "config.ld"
+    sed -i "s/$PACKAGE_NAME_REPLACE_STRING/$(sanitize "$PACKAGE_NAME")/g" "config.ld"
+    sed -i "s/$AUTHOR_REPLACE_STRING/$(sanitize "$AUTHOR")/g" "config.ld"
+fi
+
 # Rename the TOC file if it exists.
 if [ -f "TOC_FILE.toc" ]; then
     mv "TOC_FILE.toc" "$PACKAGE_NAME.toc" || exit 1
