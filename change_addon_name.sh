@@ -84,4 +84,4 @@ if [ -f ".pkgmeta" ]; then
     done
 fi
 
-echo "Replacement complete. Now change the base directory's name to $PACKAGE_NAME."
+echo "Auto boiler plate and libs fetching complete."
