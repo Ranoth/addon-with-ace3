@@ -49,13 +49,15 @@ PACKAGE_NAME=$(basename "$PWD")
 
 # Replace the placeholder strings in the source files.
 find ./src -type f -name "*.lua" -exec sed -i "s/$CODE_NAME_REPLACE_STRING/$(sanitize "$CODE_NAME")/g" {} +
+find ./src -type f -name "*.lua" -exec sed -i "s/$FULL_NAME_REPLACE_STRING/$(sanitize "$FULL_NAME")/g" {} +
+find ./src -type f -name "*.lua" -exec sed -i "s/$PACKAGE_NAME_REPLACE_STRING/$(sanitize "$PACKAGE_NAME")/g" {} +
+find ./src -type f -name "*.lua" -exec sed -i "s/$AUTHOR_REPLACE_STRING/$(sanitize "$AUTHOR")/g" {} +
 
 # Update the .toc file with the new names and interface version.
 if [ -f "TOC_FILE.toc" ]; then
     sed -i "s/$INTERFACE_VERSION_REPLACE_STRING/$(sanitize "$INTERFACE_VERSION")/g" "TOC_FILE.toc"
     sed -i "s/$FULL_NAME_REPLACE_STRING/$(sanitize "$FULL_NAME")/g" "TOC_FILE.toc"
     sed -i "s/$CODE_NAME_REPLACE_STRING/$(sanitize "$CODE_NAME")/g" "TOC_FILE.toc"
-    sed -i "s/$PACKAGE_NAME_REPLACE_STRING/$(sanitize "$PACKAGE_NAME")/g" "TOC_FILE.toc"
     sed -i "s/$AUTHOR_REPLACE_STRING/$(sanitize "$AUTHOR")/g" "TOC_FILE.toc"
 fi
 
