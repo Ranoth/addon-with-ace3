@@ -85,4 +85,4 @@ if [ -f ".pkgmeta" ]; then
     done
 fi
 
-echo "Auto boiler plate and libs fetching complete."
+echo "Auto boiler plate and libs fetching complete. Uncomment the workflows to enable CI/CD."
