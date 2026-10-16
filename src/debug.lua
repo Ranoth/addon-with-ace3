@@ -1,11 +1,11 @@
---- Debug module for YourAddon.
+--- Debug module for CODE_NAME.
 --- @module "Debug"
 
 local addon_name, _ = ...
-local YourAddon = LibStub("AceAddon-3.0"):GetAddon(addon_name)
-local Debug = YourAddon:NewModule("Debug")
+local CODE_NAME = LibStub("AceAddon-3.0"):GetAddon(addon_name)
+local Debug = CODE_NAME:NewModule("Debug")
 
-local Printer = YourAddon:GetModule("Printer")
+local Printer = CODE_NAME:GetModule("Printer")
 
 --- Higher order function to neutralize each public function of the module when debug mode is disabled.
 --- @param func any
@@ -37,7 +37,7 @@ Debug.ExampleFunction = createToggledFunction(function(self, arg1, arg2)
 end)
 
 function Debug:OnInitialize()
-    self.db = YourAddon.db.profile.debug
+    self.db = CODE_NAME.db.profile.debug
     if self.db then
         self:Enable()
     else
@@ -46,9 +46,9 @@ function Debug:OnInitialize()
 end
 
 function Debug:OnEnable()
-    YourAddon.db.profile.debug = Debug:IsEnabled()
+    CODE_NAME.db.profile.debug = Debug:IsEnabled()
 end
 
 function Debug:OnDisable()
-    YourAddon.db.profile.debug = Debug:IsEnabled()
+    CODE_NAME.db.profile.debug = Debug:IsEnabled()
 end

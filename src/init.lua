@@ -2,7 +2,7 @@
 --- @module "Init"
 
 local addon_name, _ = ... -- Gets the addon's name from the API provisioned in the TOC file
-local YourAddon = LibStub("AceAddon-3.0"):NewAddon(addon_name, "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
+local CODE_NAME = LibStub("AceAddon-3.0"):NewAddon(addon_name, "AceEvent-3.0", "AceHook-3.0", "AceConsole-3.0")
 
 local defaults = {
     profile = {
@@ -11,14 +11,14 @@ local defaults = {
     },
 }
 
-function YourAddon:OnInitialize()
+function CODE_NAME:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("YourAddonDB", defaults, true)
 end
 
-function YourAddon:OnEnable()
+function CODE_NAME:OnEnable()
 end
 
-function YourAddon:OnDisable()
-    YourAddon:UnhookAll()
-    YourAddon:UnregisterAllEvents()
+function CODE_NAME:OnDisable()
+    CODE_NAME:UnhookAll()
+    CODE_NAME:UnregisterAllEvents()
 end

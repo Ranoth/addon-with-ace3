@@ -2,11 +2,11 @@
 --- @module "Commands"
 
 local addon_name, _ = ...
-local YourAddon = LibStub("AceAddon-3.0"):GetAddon(addon_name)
-local Commands = YourAddon:NewModule("Commands")
+local CODE_NAME = LibStub("AceAddon-3.0"):GetAddon(addon_name)
+local Commands = CODE_NAME:NewModule("Commands")
 
-local Printer = YourAddon:GetModule("Printer")
-local Debug = YourAddon:GetModule("Debug")
+local Printer = CODE_NAME:GetModule("Printer")
+local Debug = CODE_NAME:GetModule("Debug")
 
 local addonShortHand = string.lower(addon_name)
 
@@ -45,7 +45,7 @@ function Commands:PrintHelp()
 end
 
 --- Registers additional slash commands for the addon
-YourAddon:RegisterChatCommand(addonShortHand, function(input)
+CODE_NAME:RegisterChatCommand(addonShortHand, function(input)
     local command, args = input:match("^(%S*)%s*(.-)$") -- match the first word as command then the rest of the input as a string of arguments
 
     local commandInfo = commandList[command]

@@ -1,32 +1,87 @@
-#!/bin/bash
+#!/bin/sh
 
-# Variables
-OLD_NAME="YourAddon"
-NEW_NAME=$1
+FULL_NAME="$1"
+AUTHOR="$2"
+
+if [ -z "$FULL_NAME" ] || [ -z "$AUTHOR" ]; then
+    echo "Usage: $0 \"Addon Name\" \"Author\"" >&2
+    exit 1
+fi
+
+case "$FULL_NAME" in
+    */*|*\\*)
+        echo "Addon name must not contain path separators." >&2
+        exit 1
+        ;;
+esac
+
+INTERFACE_VERSION_REPLACE_STRING="INTERFACE_VERSION"
+FULL_NAME_REPLACE_STRING="FULL_NAME"
+CODE_NAME_REPLACE_STRING="CODE_NAME"
+PACKAGE_NAME_REPLACE_STRING="PACKAGE_NAME"
+AUTHOR_REPLACE_STRING="AUTHOR"
 
 # Fetch the latest interface version from the provided URL
-INTERFACE_VERSION=$(curl -s https://warcraft.wiki.gg/wiki/Template:API_LatestInterface | grep -oP '(?<=<li><code>)[0-9]+(?=</code>)' | head -1)
+INTERFACE_PAGE=$(curl -fsSL --connect-timeout 10 --max-time 30 \
+    "https://warcraft.wiki.gg/wiki/Template:API_LatestInterface") || {
+    echo "Failed to fetch the interface version." >&2
+    exit 1
+}
+INTERFACE_VERSION=$(printf '%s\n' "$INTERFACE_PAGE" |
+    sed -n \
+        -e 's/.*<meta name="description" content="\([0-9][0-9]*\).*/\1/p' \
+        -e 's/.*<li><code>\([0-9][0-9]*\)<\/code>.*/\1/p' | head -1)
 
-# Check if INTERFACE_VERSION is empty
 if [ -z "$INTERFACE_VERSION" ]; then
     echo "Failed to fetch the interface version."
     exit 1
 fi
 
-# Rename AddonName.toc to NEW_NAME.toc
-if [ -f "AddonName.toc" ]; then
-    mv "AddonName.toc" "${NEW_NAME}.toc"
+# Use to sanitize strings for use in sed replacement patterns.
+sanitize() {
+    printf '%s\n' "$1" | sed 's/[\/&]/\\&/g'
+}
+
+CODE_NAME=$(printf '%s\n' "$FULL_NAME" | tr -d " '")
+
+PACKAGE_NAME=$(printf '%s\n' "$FULL_NAME" | tr " '" '-')
+
+# Replace the placeholder strings in the source files.
+find ./src -type f -name "*.lua" -exec sed -i "s/$CODE_NAME_REPLACE_STRING/$(sanitize "$CODE_NAME")/g" {} +
+
+# Update the .toc file with the new names and interface version.
+if [ -f "TOC_FILE.toc" ]; then
+    sed -i "s/$INTERFACE_VERSION_REPLACE_STRING/$(sanitize "$INTERFACE_VERSION")/g" "TOC_FILE.toc"
+    sed -i "s/$FULL_NAME_REPLACE_STRING/$(sanitize "$FULL_NAME")/g" "TOC_FILE.toc"
+    sed -i "s/$CODE_NAME_REPLACE_STRING/$(sanitize "$CODE_NAME")/g" "TOC_FILE.toc"
+    sed -i "s/$PACKAGE_NAME_REPLACE_STRING/$(sanitize "$PACKAGE_NAME")/g" "TOC_FILE.toc"
+    sed -i "s/$AUTHOR_REPLACE_STRING/$(sanitize "$AUTHOR")/g" "TOC_FILE.toc"
 fi
 
-# Find and replace in .lua files in src directory, and .toc, .pkgmeta files in the current directory
-find ./src -type f -name "*.lua" -exec sed -i "s/$OLD_NAME/$NEW_NAME/g" {} +
-find . -maxdepth 1 -type f \( -name "*.toc" -o -name "*.pkgmeta" \) -exec sed -i "s/$OLD_NAME/$NEW_NAME/g" {} +
-
-# Update the interface version in the .toc file
-if [ -f "${NEW_NAME}.toc" ]; then
-    sed -i "s/## Interface: .*/## Interface: ${INTERFACE_VERSION}/" "${NEW_NAME}.toc"
+# Rename the TOC file if it exists.
+if [ -f "TOC_FILE.toc" ]; then
+    mv "TOC_FILE.toc" "$PACKAGE_NAME.toc" || exit 1
 fi
 
-mkdir libs
+if [ -f ".pkgmeta" ]; then
+    sed -i "s/^package-as:.*/package-as: $(sanitize "$PACKAGE_NAME")/" ".pkgmeta"
+fi
 
-echo "Replacement complete. Now change the base directory's name to $1 and fill the libs folder with the necessary libraries."
+mkdir -p libs
+
+# Fetch every external listed in .pkgmeta, including commented-out ones.
+if [ -f ".pkgmeta" ]; then
+    if ! command -v svn >/dev/null 2>&1; then
+        echo "svn is required to fetch the libraries but was not found." >&2
+        exit 1
+    fi
+    sed -n 's/^[[:space:]]*#*[[:space:]]*\(\(libs\/\)\{0,1\}[A-Za-z0-9._-]*\):[[:space:]]*\(https\{0,1\}:\/\/[^[:space:]]*\).*/\1 \3/p' ".pkgmeta" |
+    while read -r LIB_PATH LIB_URL; do
+        LIB_DIR="libs/${LIB_PATH#libs/}"
+        echo "Fetching $LIB_DIR from $LIB_URL"
+        rm -rf "$LIB_DIR"
+        svn export --force -q "$LIB_URL" "$LIB_DIR" || echo "Failed to fetch $LIB_DIR" >&2
+    done
+fi
+
+echo "Replacement complete. Now change the base directory's name to $PACKAGE_NAME."

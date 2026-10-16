@@ -1,9 +1,9 @@
---- Printer module for YourAddon.
+--- Printer module for CODE_NAME.
 --- @module "Printer"
 
 local addon_name, _ = ...
-local YourAddon = LibStub("AceAddon-3.0"):GetAddon(addon_name)
-local Printer = YourAddon:NewModule("Printer")
+local CODE_NAME = LibStub("AceAddon-3.0"):GetAddon(addon_name)
+local Printer = CODE_NAME:NewModule("Printer")
 
 local colorizedAddonName = "|cffc66ff0" .. addon_name .. "|r"
 
